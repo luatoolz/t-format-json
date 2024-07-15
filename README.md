@@ -15,10 +15,10 @@ _ = json.decode('{"a":2}')
 
 ## system depends
 alpine:
-- `lua${LUA_VERSION}-dev`
+- `lua-dev`
 
 debian:
-- `liblua${LUA_VERSION}-dev`
+- `liblua-dev`
 
 ## test depends
 - `busted`
