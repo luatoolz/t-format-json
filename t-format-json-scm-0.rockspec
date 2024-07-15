@@ -19,8 +19,8 @@ t.format.json: json object interface for `t` lib
 
 dependencies = {
   "lua >= 5.1",
-  "rapidjson",
   "t",
+  "rapidjson",
 }
 
 test_dependencies = {
