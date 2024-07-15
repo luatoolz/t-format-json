@@ -16,6 +16,7 @@ _ = json.decode('{"a":2}')
 ## system depends
 alpine:
 - `lua${LUA_VERSION}-dev`
+
 debian:
 - `liblua${LUA_VERSION}-dev`
 
