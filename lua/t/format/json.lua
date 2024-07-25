@@ -2,7 +2,7 @@ local t = require "t"
 local jsonlib = require "rapidjson"
 
 local options_pretty = {pretty=true, sort_keys=true, empty_table_as_array=true}
-local options_sort = {sort_keys=true}
+local options_sort = {sort_keys=true, empty_table_as_array=true}
 
 local function clear(self)
   if type(self)~='table' then return self end

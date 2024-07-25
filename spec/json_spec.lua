@@ -44,7 +44,7 @@ describe("json", function()
 		assert.equal('true', json.encode(true))
 		assert.equal('false', json.encode(false))
 
-		assert.equal('{}', json.encode({}))
+		assert.equal('[]', json.encode({}))
 
 		assert.equal('["x"]', json.encode({"x"}))
 		assert.equal('["x","y"]', json.encode({"x", "y"}))
