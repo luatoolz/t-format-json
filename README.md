@@ -26,3 +26,5 @@ debian:
 
 ## TODO
 - maybe `cjson` and/or other common libs support
+  - https://github.com/neoxic/lua-json
+  - https://github.com/mpx/lua-cjson
