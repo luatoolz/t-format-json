@@ -17,7 +17,7 @@ return t.object({
   pretty=function(x) return jsonlib.encode(x, options_pretty) end,
   encode=function(x)
     local r,e = no.call(jsonlib.encode(clear(x), options_sort))
-    if e and not r then ngx.log(ngx.NOTICE, e) end
+    if e and not r then if ngx then ngx.log(ngx.NOTICE, e) else print(e) end end
     return r
   end,
   decode=function(x) return clear(jsonlib.decode(x)) end,
