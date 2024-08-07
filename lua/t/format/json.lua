@@ -13,7 +13,7 @@ end
 
 return t.object({
   pretty=function(x) return jsonlib.encode(x, options_pretty) end,
-  encode=function(x) return jsonlib.encode(x, options_sort) end,
+  encode=function(x) return jsonlib.encode(clear(x), options_sort) end,
   decode=function(x) return clear(jsonlib.decode(x)) end,
   __call=function(self, x)
     if type(x)=='string' then x=self.decode(x); end
