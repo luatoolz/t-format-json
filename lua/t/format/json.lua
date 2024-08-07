@@ -2,6 +2,7 @@ local t = require "t"
 local jsonlib = require "rapidjson"
 local meta = require "meta"
 local no = meta.no
+local ngx=ngx or {}
 
 local options_pretty = {pretty=true, sort_keys=true, empty_table_as_array=true}
 local options_sort = {sort_keys=true, empty_table_as_array=true}
@@ -16,9 +17,9 @@ end
 return t.object({
   pretty=function(x) return jsonlib.encode(x, options_pretty) end,
   encode=function(x)
-    local r,e = no.call(jsonlib.encode(clear(x), options_sort))
+    local r,e = no.call(jsonlib.encode, type(x)=='table' and clear(x) or x, options_sort)
     if e and not r then if ngx then ngx.log(ngx.NOTICE, e) else print(e) end end
-    return r
+    return r, e
   end,
   decode=function(x) return clear(jsonlib.decode(x)) end,
   __call=function(self, x)
