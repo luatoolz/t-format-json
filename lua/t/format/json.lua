@@ -19,7 +19,7 @@ return t.object({
   encode=function(x)
     local r,e = no.call(jsonlib.encode, type(x)=='table' and clear(x) or x, options_sort)
     if e and not r then if ngx then ngx.log(ngx.NOTICE, e) else print(e) end end
-    return r, e
+    return r
   end,
   decode=function(x) return clear(jsonlib.decode(x)) end,
   __call=function(self, x)
