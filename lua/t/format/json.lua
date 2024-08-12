@@ -16,15 +16,11 @@ end
 
 return t.object({
   pretty=function(x) return jsonlib.encode(x, options_pretty) end,
-  encode=function(x)
-    local r,e = no.call(jsonlib.encode, type(x)=='table' and clear(x) or x, options_sort)
-    if e and not r then if ngx then ngx.log(ngx.NOTICE, e) else print(e) end end
-    return r
-  end,
+  encode=function(x) return assert(jsonlib.encode(clear(x), options_sort)) end,
   decode=function(x) return clear(jsonlib.decode(x)) end,
   __call=function(self, x)
-    if type(x)=='string' then x=self.decode(x); end
-    if type(x)=='table' then return clear(x) end
+    if type(x)=='string' then return self.decode(x); end
+    if type(x)=='table' then return assert(jsonlib.encode(clear(x), options_sort)) end
     return x
   end,
 }):factory()
