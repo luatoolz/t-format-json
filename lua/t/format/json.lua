@@ -20,7 +20,9 @@ return t.object({
   decode=function(x) return clear(jsonlib.decode(x)) end,
   __call=function(self, x)
     if type(x)=='string' then return self.decode(x); end
-    if type(x)=='table' then return assert(jsonlib.encode(clear(x), options_sort)) end
+    if type(x)=='table' then
+      if getmetatable(x) and type(getmetatable(x).__tostring)=='function' then return tostring(x) end
+      if not getmetatable(x) then return assert(jsonlib.encode(clear(x), options_sort)) end end
     return x
   end,
 }):factory()
