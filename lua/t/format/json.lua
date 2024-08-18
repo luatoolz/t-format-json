@@ -1,12 +1,11 @@
 local jsonlib = require "rapidjson"
-local meta = require "meta"
-local no = meta.no
-local ngx=ngx or {}
+require "meta"
 
 local options_pretty = {pretty=true, sort_keys=true, empty_table_as_array=true}
 local options_sort = {sort_keys=true, empty_table_as_array=true}
 
 local getmetatable = debug.getmetatable or getmetatable
+local setmetatable = debug.setmetatable or setmetatable
 
 local atom = {
   ["number"]=true,
