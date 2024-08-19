@@ -20,12 +20,14 @@ local function clear(self)
 end
 
 local function __json(x)
-  local to = (getmetatable(x or {}) or {}).__tojson
+  local mt = getmetatable(x or {}) or {}
+  local to = mt.__toJSON or mt.__tojson
   if type(to)=='function' then return to(x) end
 end
 
 local function __string(x)
-  local to = (getmetatable(x or {}) or {}).__tostring
+  local mt = getmetatable(x or {}) or {}
+  local to = mt.__toJSON or mt.__tojson
   if type(to)=='function' then return to(x) end
 end
 
@@ -47,18 +49,22 @@ local json = setmetatable({
     if type(x)=='function' then return nil end
     if type(x)=='thread' then return nil end
     if type(x)=='userdata' then
-      if type((getmetatable(x or {}) or {}).__tojson)=='function' then
-        x=__json(x) --or __string(x)
+      local mt = getmetatable(x or {}) or {}
+      local to = mt.__toJSON or mt.__tojson
+      if type(to)=='function' then
+        x=__json(x)
         if deep then return x end
         return type(x)=='string' and x or self.encode(x)
       end
       return 'userdata'
     end
     if type(x)=='table' then
-      if type((getmetatable(x or {}) or {}).__tojson)=='function' then
+      local mt = getmetatable(x or {}) or {}
+      local to = mt.__toJSON or mt.__tojson
+      if type(to)=='function' then
         x=__json(x)
         if deep then return x end
-        return self.encode(x)
+        return type(x)=='string' and x or self.encode(x)
       end
       for k,v in pairs(x) do x[k]=self(v, true) end
       if deep then return x end
@@ -67,7 +73,5 @@ local json = setmetatable({
     error('unknownn type' .. type(x))
   end,
 })
-
-tojson = json
 
 return json
