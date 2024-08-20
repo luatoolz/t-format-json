@@ -90,6 +90,15 @@ describe("json", function()
 		assert.same({a=1}, json.decode('{"a":1}'))
 		assert.same({a=1,b="2"}, json.decode('{"a":1,"b":"2"}'))
 		assert.same({b="2",a=1}, json.decode('{"a":1,"b":"2"}'))
+
+    local three =
+      '[{"_id":"66ba9cdee46231517f065198","token":"95687c9a1a88dd2d552438573dd018748dfff0222c76f085515be2dc1db2afa7","role":"root"},' ..
+      '{"_id":"66ba9cdee46231517f065199","token":"46db395df332f18b437d572837d314e421804aaed0f229872ce7d8825d11ff9a","role":"traffer"},' ..
+      '{"_id":"66ba9cdee46231517f06519a","token":"60879afb54028243bb82726a5485819a8bbcacd1df738439bfdf06bc3ea628d0","role":"panel"}]'
+    local t3 = json.decode(three)
+    assert.is_not_nil(t3)
+    assert.equal(3, #t3)
+    assert.equal('traffer', t3[2].role)
 	end)
 	it("pretty", function()
 		assert.equal('[]', json.pretty({}))

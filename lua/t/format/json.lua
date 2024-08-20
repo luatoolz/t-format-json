@@ -13,6 +13,13 @@ local atom = {
   ["string"]=true,
 }
 
+local function clear(self)
+  if type(self)~='table' then return self end
+  setmetatable(self, nil)
+  for k,v in pairs(self) do clear(v) end
+  return self
+end
+
 local function __json(x)
   local mt = getmetatable(x or {}) or {}
   local to = mt.__toJSON or mt.__tojson
@@ -32,9 +39,9 @@ json = setmetatable({
   encode=function(x)
     if type(x)=='string' then return x end
     if type(x)~='table' and type(x)~='userdata' then return jsonlib.encode(x, options_sort) end
-    return assert(jsonlib.encode(table.mtremove(x), options_sort))
+    return assert(jsonlib.encode(clear(x), options_sort))
   end,
-  decode=function(x) return table.mtremove(jsonlib.decode(x)) end,
+  decode=function(x) return clear(jsonlib.decode(x)) end,
 },{
   __call=function(self, x, deep)
     if type(x)=='function' or type(x)=='thread' or type(x)=='CFunction' then x=tostring(x) end
