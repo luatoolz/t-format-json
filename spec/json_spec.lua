@@ -99,6 +99,10 @@ describe("json", function()
     assert.is_not_nil(t3)
     assert.equal(3, #t3)
     assert.equal('traffer', t3[2].role)
+
+    local json_obj = '{"done":true, "message":"some", "created":0}'
+    assert.is_true(is.json(json_obj))
+    assert.is_table(json.decode(json_obj))
 	end)
 	it("pretty", function()
 		assert.equal('[]', json.pretty({}))
