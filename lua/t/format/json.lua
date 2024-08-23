@@ -67,7 +67,7 @@ json = setmetatable({
       end
       for k,v in pairs(x) do x[k]=self(v, true) end
       if deep then return x end
-      return self.encode(x)
+      return type(x)=='string' and x or self.encode(x)
     end
     error('unknownn type' .. type(x))
   end,
