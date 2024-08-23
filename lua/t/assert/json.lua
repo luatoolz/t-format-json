@@ -1,0 +1,1 @@
+return {1, "expected to be json string: %s", "expected to be not json string: %s"}
