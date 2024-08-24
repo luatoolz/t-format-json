@@ -1,4 +1,4 @@
-local jsonlib = require "rapidjson"
+local driver = require "rapidjson"
 require "meta"
 
 local options_pretty = {pretty=true, sort_keys=true, empty_table_as_array=true}
@@ -26,22 +26,16 @@ local function __json(x)
   if type(to)=='function' then return to(x) end
 end
 
-local function __string(x)
-  local mt = getmetatable(x or {}) or {}
-  local to = mt.__toJSON or mt.__tojson
-  if type(to)=='function' then return to(x) end
-end
-
 local json
 json = setmetatable({
-  null=jsonlib.null,
-  pretty=function(x) return jsonlib.encode(x, options_pretty) end,
+  null=driver.null,
+  pretty=function(x) return driver.encode(x, options_pretty) end,
   encode=function(x)
     if type(x)=='string' then return x end
-    if type(x)~='table' and type(x)~='userdata' then return jsonlib.encode(x, options_sort) end
-    return assert(jsonlib.encode(clear(x), options_sort))
+    if type(x)~='table' and type(x)~='userdata' then return driver.encode(x, options_sort) end
+    return assert(driver.encode(clear(x), options_sort))
   end,
-  decode=function(x) return clear(jsonlib.decode(x)) end,
+  decode=function(x) return clear(driver.decode(x)) end,
 },{
   __call=function(self, x, deep)
     if type(x)=='function' or type(x)=='thread' or type(x)=='CFunction' then x=tostring(x) end
@@ -52,22 +46,23 @@ json = setmetatable({
       local to = mt.__toJSON or mt.__tojson
       if type(to)=='function' then
         x=__json(x)
-        if deep then return x end
-        return type(x)=='string' and x or self.encode(x)
+        if deep or type(x)=='nil' then return x end
+        return self.encode(x)
       end
-      return 'userdata'
+      return tostring(x)
     end
     if type(x)=='table' then
       local mt = getmetatable(x or {}) or {}
       local to = mt.__toJSON or mt.__tojson
       if type(to)=='function' then
         x=__json(x)
-        if deep then return x end
+        if deep or type(x)=='nil' then return x end
         return self.encode(x)
       end
-      for k,v in pairs(x) do x[k]=self(v, true) end
-      if deep then return x end
-      return type(x)=='string' and x or self.encode(x)
+      local rv={}
+      for k,v in pairs(x) do rv[k]=self(v, true) end
+      if deep then return rv end
+      return self.encode(rv)
     end
     error('unknownn type' .. type(x))
   end,
