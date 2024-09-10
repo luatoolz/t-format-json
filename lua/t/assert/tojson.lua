@@ -1,1 +1,0 @@
-return {1, "expected to have __toJSON/__tojson meta method: %s", "expected to not have __toJSON/__tojson meta method: %s"}
