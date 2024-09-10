@@ -18,8 +18,7 @@ local function clear(self)
   return self
 end
 
-local json
-json = setmetatable({
+return setmetatable({
   null=driver.null,
   pretty=function(x) return driver.encode(x, options_pretty) end,
   encode=function(x)
@@ -28,15 +27,13 @@ json = setmetatable({
     return assert(driver.encode(clear(x), options_sort))
   end,
   decode=function(x) return clear(driver.decode(x)) end,
-  mt=function(x) return getmetatable(x or {}) or {} end,
-  array=function(x) return is.table(x) and (self.mt(x).__array or self.mt(x).__arraytype or next(x)=='nil' or type(x[1])~='nil') or false end,
+  mt=function(self, x) return getmetatable(x or {}) or {} end,
+  array=function(self, x) return is.table(x) and (self:mt(x).__array or self:mt(x).__arraytype or next(x)=='nil' or type(x[1])~='nil') or false end,
 },{
   __call=function(self, x)
     if x==self.null or type(x)=='nil' then return self.null end
     if is.string(x) then return x end
     if is.atom(x) then return assert(driver.encode(x)) end
-    return assert(driver.encode(tex(x, fix), options_sort))
+    return assert(driver.encode(tex(x), options_sort))
   end,
 })
-
-return json
