@@ -1,5 +1,9 @@
+local inspect=require "inspect"
 local driver = require "rapidjson"
 require "meta"
+local t=t or require "t"
+local is=t.is
+local tex=t.exporter
 
 local options_pretty = {pretty=true, sort_keys=true, empty_table_as_array=true}
 local options_sort = {sort_keys=true, empty_table_as_array=true}
@@ -7,23 +11,11 @@ local options_sort = {sort_keys=true, empty_table_as_array=true}
 local getmetatable = debug.getmetatable or getmetatable
 local setmetatable = debug.setmetatable or setmetatable
 
-local atom = {
-  ["number"]=true,
-  ["boolean"]=true,
-  ["string"]=true,
-}
-
 local function clear(self)
   if type(self)~='table' then return self end
   setmetatable(self, nil)
   for k,v in pairs(self) do clear(v) end
   return self
-end
-
-local function __json(x)
-  local mt = getmetatable(x or {}) or {}
-  local to = mt.__toJSON or mt.__tojson
-  if type(to)=='function' then return to(x) end
 end
 
 local json
@@ -36,35 +28,14 @@ json = setmetatable({
     return assert(driver.encode(clear(x), options_sort))
   end,
   decode=function(x) return clear(driver.decode(x)) end,
+  mt=function(x) return getmetatable(x or {}) or {} end,
+  array=function(x) return is.table(x) and (self.mt(x).__array or self.mt(x).__arraytype or next(x)=='nil' or type(x[1])~='nil') or false end,
 },{
-  __call=function(self, x, deep)
-    if type(x)=='function' or type(x)=='thread' or type(x)=='CFunction' then x=tostring(x) end
-    if atom[type(x)] then return deep and x or self.encode(x) end
+  __call=function(self, x)
     if x==self.null or type(x)=='nil' then return self.null end
-    if type(x)=='userdata' then
-      local mt = getmetatable(x or {}) or {}
-      local to = mt.__toJSON or mt.__tojson
-      if type(to)=='function' then
-        x=__json(x)
-        if deep or type(x)=='nil' then return x end
-        return self.encode(x)
-      end
-      return tostring(x)
-    end
-    if type(x)=='table' then
-      local mt = getmetatable(x or {}) or {}
-      local to = mt.__toJSON or mt.__tojson
-      if type(to)=='function' then
-        x=__json(x)
-        if deep or type(x)=='nil' then return x end
-        return self.encode(x)
-      end
-      local rv={}
-      for k,v in pairs(x) do rv[k]=self(v, true) end
-      if deep then return rv end
-      return self.encode(rv)
-    end
-    error('unknownn type' .. type(x))
+    if is.string(x) then return x end
+    if is.atom(x) then return assert(driver.encode(x)) end
+    return assert(driver.encode(tex(x, fix), options_sort))
   end,
 })
 

@@ -1,12 +1,11 @@
 # t.format.json: json object
+Wrapper around `rapidjson` for `t` lib.
 ```lua
 local t = require "t"
 local json = t.format.json
 
-_ = json.encode({a=2})
-_ = json.pretty({a=2})
-
-_ = json.decode('{"a":2}')
+json({a=2})
+json.decode('{"a":2}')
 ```
 
 ## depends luarocks
