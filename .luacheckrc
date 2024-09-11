@@ -1,11 +1,12 @@
 stds.t = {
-  globals = {"math", "string", "table", "package", "toboolean", "tointeger", "pack", "unpack", "ngx"},
+  globals = {"math", "string", "table", "package", "toboolean", "tointeger", "pack", "unpack", "ngx", "t"},
 }
 ignore = {
   "212/%.%.%.",
   "131/_",
   "211/_",
   "211/t",
+  "211/inspect",
   "212/_",
   "213/_",
   "542",

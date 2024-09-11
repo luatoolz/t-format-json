@@ -1,9 +1,9 @@
-local inspect=require "inspect"
-local driver = require "rapidjson"
 require "meta"
 local t=t or require "t"
 local is=t.is
 local tex=t.exporter
+local driver = require "rapidjson"
+local inspect=require "inspect"
 
 local options_pretty = {pretty=true, sort_keys=true, empty_table_as_array=true}
 local options_sort = {sort_keys=true, empty_table_as_array=true}
