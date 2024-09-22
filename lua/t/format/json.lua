@@ -32,8 +32,9 @@ return setmetatable({
 },{
   __call=function(self, x)
     if x==self.null or type(x)=='nil' then return self.null end
+    x=tex(x)
     if is.string(x) then return x end
     if is.atom(x) then return assert(driver.encode(x)) end
-    return assert(driver.encode(tex(x), options_sort))
+    return assert(driver.encode(x, options_sort))
   end,
 })
