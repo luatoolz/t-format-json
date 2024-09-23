@@ -3,7 +3,8 @@ describe("json", function()
   setup(function()
     t = require "t"
     is = t.is
-    json = require "t.format.json"
+    json = t.format.json
+--require("t.format.json")
   end)
   it("load", function()
     assert.is_table(json)
