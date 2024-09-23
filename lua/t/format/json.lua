@@ -1,9 +1,9 @@
 require "meta"
+local pkg = ...
 local t=t or require "t"
 local is=t.is
 local tex=t.exporter
 local driver = require "rapidjson"
-local inspect=require "inspect"
 
 local options_pretty = {pretty=true, sort_keys=true, empty_table_as_array=true}
 local options_sort = {sort_keys=true, empty_table_as_array=true}
@@ -37,4 +37,6 @@ return setmetatable({
     if is.atom(x) then return assert(driver.encode(x)) end
     return assert(driver.encode(x, options_sort))
   end,
+  __mod=function(self, it) return is.json(it) end,
+  __tostring=function(self) return pkg end,
 })
