@@ -4,7 +4,6 @@ describe("json", function()
     t = require "t"
     is = t.is
     json = t.format.json
---require("t.format.json")
   end)
   it("load", function()
     assert.is_table(json)
