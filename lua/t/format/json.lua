@@ -3,11 +3,11 @@ local is=t.is
 local export=t.exporter
 local driver = require "rapidjson"
 
+local clear=function(self) return export(self, false) end
 local opt = {
   pretty = {pretty=true, sort_keys=true, empty_table_as_array=true},
   sort = {sort_keys=true, empty_table_as_array=true},
 }
-local clear=function(self) return export(self, false) end
 
 return setmetatable({
   null=driver.null,
