@@ -123,5 +123,8 @@ describe("json", function()
 
     assert.equal('[]', json(table({})))
     assert.equal('[1,2,3]', json(table({1, 2, 3})))
+
+    assert.is_nil(getmetatable(json.decode('{"a":"yes","b":["one","two","three","four","five"]}')))
+    assert.is_nil(getmetatable(json.decode('{"a":"yes","b":["one","two","three","four","five"]}').b))
   end)
 end)
