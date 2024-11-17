@@ -1,6 +1,7 @@
 local t=t or require "t"
 local is=t.is
 local export=t.exporter
+local match=t.match
 local driver = require "rapidjson"
 
 local clear=function(self) return export(self, false) end
@@ -19,9 +20,14 @@ return setmetatable({
     if is.atom(x) then return driver.encode(x, options or opt.sort) end
     return assert(driver.encode(x, options or opt.sort))
   end,
-  decode=function(x) return clear(driver.decode(x)) end,
+  decode=function(x)
+    local rv=driver.decode(x)
+    local __type = (getmetatable(rv or {}) or {}).__jsontype
+    rv=clear(rv)
+    return __type=='array' and t.array(rv) or rv
+  end,
 },{
   __call=function(self, x) return self.encode(x) end,
   __mod=function(self, it) return is.json(it) end,
-  __tostring=function(self) return t.type(self) end,
+  __tostring=function(self) return match.basename(t.type(self)) end,
 })
