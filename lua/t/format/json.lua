@@ -15,10 +15,7 @@ return setmetatable({
   pretty=function(x) return driver.encode(x, opt.pretty) end,
   encode=function(x, options)
     if x==driver.null or type(x)=='nil' then return driver.null end
-    x=clear(x)
-    if type(x)=='string' then return x end
-    if is.atom(x) then return driver.encode(x, options or opt.sort) end
-    return assert(driver.encode(x, options or opt.sort))
+    return driver.encode(clear(x), options or opt.sort)
   end,
   decode=function(x)
     local rv=driver.decode(x)

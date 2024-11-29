@@ -42,9 +42,9 @@ describe("json", function()
 
     assert.equal('7', json(7))
     assert.equal('7.2', json(7.2))
-    assert.equal('7', json("7"))
+    assert.equal('"7"', json("7"))
 
-    assert.equal('', json(""))
+    assert.equal('""', json(""))
 
     assert.equal('true', json(true))
     assert.equal('false', json(false))
@@ -73,6 +73,7 @@ describe("json", function()
     assert.equal(7, json.decode('7'))
     assert.equal(7.2, json.decode('7.2'))
     assert.equal(7, json.decode("7"))
+    assert.equal('7', json.decode('"7"'))
 
     assert.equal(true, json.decode('true'))
     assert.equal(false, json.decode('false'))
