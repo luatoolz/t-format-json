@@ -1,1 +1,1 @@
-return function(x) return (type(x)=='string' and (x:match("^[%s\n]*%{.*%}[%s\n]*$") or x:match("^[%s\n]*%[.*%][%s\n]*$"))) and true or false end
+return function(x) return (type(x)=='string' and (x:match("^[%s\n]*%{.*%}[%s\n]*$") or x:match("^[%s\n]*%[.*%][%s\n]*$"))) and true or nil end
