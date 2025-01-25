@@ -17,12 +17,12 @@ return setmetatable({
     if x==driver.null or type(x)=='nil' then return driver.null end
     return driver.encode(clear(x), options or opt.sort)
   end,
-  decode=function(x)
+  decode=function(x) if type(x)=='string' then
     local rv=driver.decode(x)
     local __type = (getmetatable(rv or {}) or {}).__jsontype
     rv=clear(rv)
     return __type=='array' and t.array(rv) or rv
-  end,
+  end; return x end,
 },{
   __call=function(self, x) return self.encode(x) end,
   __mod=function(self, it) return is.json(it) end,
