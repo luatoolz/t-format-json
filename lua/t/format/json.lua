@@ -1,8 +1,7 @@
-local t=t or require "t"
+local driver = require "rapidjson"
+local t = require 't'
 local is=t.is
 local export=t.exporter
-local match=t.match
-local driver = require "rapidjson"
 
 local clear=function(self) return export(self, false) end
 local opt = {
@@ -23,8 +22,11 @@ return setmetatable({
     rv=clear(rv)
     return __type=='array' and t.array(rv) or rv
   end; return x end,
+  test  = is.json,
 },{
   __call=function(self, x) return self.encode(x) end,
-  __mod=function(self, it) return is.json(it) end,
-  __tostring=function(self) return match.basename(t.type(self)) end,
+  __mod=function(a, b)
+    if type(b)=='string' then return is.json(b) and a or nil end
+  end,
+  __tostring=function(self) return 'json' end,
 })

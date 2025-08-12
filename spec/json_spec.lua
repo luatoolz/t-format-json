@@ -1,9 +1,10 @@
 describe("json", function()
-  local t, json, is
+  local t, format, json, is
   setup(function()
     t = require "t"
     is = t.is
-    json = t.format.json
+    format = t.format
+    json = format.json
   end)
   it("load", function()
     assert.is_table(json)
@@ -20,6 +21,8 @@ describe("json", function()
     assert.is_nil(is.json('7'))
     assert.is_nil(is.json('"7"'))
 
+    assert.is_nil(is.json('66909d26cbade70b6b022b9a'))
+
     assert.is_true(is.json('[]'))
     assert.is_true(is.json('{}'))
     assert.is_true(is.json(' {}'))
@@ -34,6 +37,9 @@ describe("json", function()
 
     assert.is_true(is.json(" \n{\n}\n "))
     assert.is_true(is.json(" \n[\n]\n "))
+
+    assert.is_true(is.json('{"_id":"66ef5a258aa5f11c0c094b26", "n":2}'))
+    assert.same({_id='66ef5a258aa5f11c0c094b26', n=2}, json.decode('{"_id":"66ef5a258aa5f11c0c094b26", "n":2}'))
   end)
   it("encode", function()
     assert.equal(json.null, json())
@@ -127,5 +133,32 @@ describe("json", function()
 
     assert.is_nil(getmetatable(json.decode('{"a":"yes","b":["one","two","three","four","five"]}')))
     assert.is_nil(getmetatable(json.decode('{"a":"yes","b":["one","two","three","four","five"]}').b))
+  end)
+  it("test", function()
+    assert.equal(json, json % '[]')
+    assert.equal(json, json % '[1]')
+    assert.equal(json, json % '[1,2]')
+    assert.equal(json, json % '["one","two","three","four","five"]')
+    assert.equal(json, json % '{}')
+    assert.equal(json, json % '{"a":1}')
+    assert.equal(json, json % '{"a":1,"b":"2"}')
+    assert.equal(json, json % '{"a":"yes","b":["one","two","three","four","five"]}')
+
+    assert.is_nil(json % '')
+    assert.is_nil(json % 0)
+    assert.is_nil(json % {})
+    assert.is_nil(json % ' ')
+    assert.is_nil(json % 'test')
+
+--[[
+    assert.equal(json, (format % '[]')[1])
+    assert.equal(json, format / '[1]')
+    assert.equal(json, format / '[1,2]')
+    assert.equal(json, format / '["one","two","three","four","five"]')
+    assert.equal(json, format / '{}')
+    assert.equal(json, format / '{"a":1}')
+    assert.equal(json, format / '{"a":1,"b":"2"}')
+    assert.equal(json, format / '{"a":"yes","b":["one","two","three","four","five"]}')
+--]]
   end)
 end)
